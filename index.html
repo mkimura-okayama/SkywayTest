@@ -20,7 +20,7 @@
     <input type="button" id="speech" onClick="speech_test();" value="音認開始">
     <p id="status"></p>
     <input type="button" id="btnSend"   onClick="send_function();" value="送信">
-    <p>ver 0.7</p>
+    <p>ver 0.7.1</p>
     <p id="their-text">受信テキスト</p>
     <script>
         // SkyWay
@@ -34,8 +34,8 @@
 
         function speech_test() {
             console.log("start speech_test");
-            SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-            speechRecognition = new SpeechRecognition(); 
+            window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+            speechRecognition = new window.SpeechRecognition(); 
             speechRecognition.onresult = console.log; 
             speechRecognition.start();
         }
