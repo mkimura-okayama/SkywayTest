@@ -33,7 +33,7 @@
             console.log("app:start vr_function")
             speech.style.backgroundColor = "lightblue";
             window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-            var recognition = new webkitSpeechRecognition();
+            var recognition = new SpeechRecognition();
             recognition.lang = 'ja';
             recognition.interimResults = true;
             recognition.continuous = true;
