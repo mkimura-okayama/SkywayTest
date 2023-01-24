@@ -19,7 +19,7 @@
     <br>
     <input type="button" id="speech" onClick="vr_function();" value="音認開始">
     <input type="button" id="btnSend"   onClick="send_function();" value="送信">
-    <p>ver 0.2</p>
+    <p>ver 0.3</p>
     <p id="their-text">受信テキスト</p>
     <script>
         // SkyWay
@@ -35,7 +35,7 @@
             speech.style.backgroundColor = "lightblue";
             window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
             var recognition = new window.SpeechRecognition();
-            recognition.lang = 'ja-JP';
+            recognition.lang = 'ja';
             recognition.interimResults = true;
             recognition.continuous = true;
 
