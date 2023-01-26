@@ -17,10 +17,9 @@
     <textarea id="result_text" cols="100" rows="3">
     </textarea>
     <br>
-    <button id="speech" onClick="recog_chg();">音声入力　ストップ</button>
+    <button id="speech" onClick="recog_chg();">音声入力を停止する</button>
     <p id="status"></p>
-    <input type="button" id="btnSend"   onClick="send_function();" value="送信">
-    <p>ver 0.8.8</p>
+    <p>ver 0.8.9</p>
     <p id="their-text">受信テキスト</p>
     <script>
         // SkyWay
@@ -124,7 +123,7 @@
         function recog_start() {
             console.log("recog_start")
             recognition.start();
-            btn_recog.textContent = "音声入力　ストップ"
+            btn_recog.textContent = "音声入力を停止する"
             //speech.textContent = "音声入力　ストップ"
             speech.style.backgroundColor = "lightblue";
             flg_speech = 1;
@@ -133,7 +132,7 @@
         function recog_stop() {
             console.log("recog_stop")
             recognition.stop();
-            btn_recog.textContent = "音声入力　スタート"
+            btn_recog.textContent = "音声入力を開始する"
             //speech.textContent = "音声入力　スタート"
             speech.style.backgroundColor = "white";
             flg_speech = 0;
