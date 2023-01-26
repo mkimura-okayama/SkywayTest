@@ -17,7 +17,7 @@
     <textarea id="result_text" cols="100" rows="3">
     </textarea>
     <br>
-    <input type="button" id="speech" onClick="speech_test();" value="音認開始">
+    <input type="button" id="speech" onClick="recog_start();" value="音認開始">
     <p id="status"></p>
     <input type="button" id="btnSend"   onClick="send_function();" value="送信">
     <p>ver 0.7.1</p>
@@ -29,74 +29,83 @@
         var dataConn = null;
 
         //speech
-        var flag_speech = 0;
+        var flg_speech = 0;
 
+        const btn_recog = document.getElementById("speech")
+        const disp_status = document.getElementById('status')
 
-        function speech_test() {
-            console.log("start speech_test");
-            window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-            speechRecognition = new window.SpeechRecognition(); 
-            speechRecognition.onresult = console.log; 
-            speechRecognition.start();
-        }
+        window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+        var recognition = new window.SpeechRecognition();
+        recognition.lang = 'ja';
+        recognition.interimResults = true;
+        recognition.continuous = true;
 
+        recognition.onsoundstart = function() {
+            console.log("onsoundstart")
+            //document.getElementById('status').innerHTML = "認識中";
+            disp_status.innerHTML = "認識中";
+            console.log("onsoundstart")
+        };
+        recognition.onnomatch = function() {
+            console.log("onnomatch")
+            //document.getElementById('status').innerHTML = "もう一度試してください";
+            disp_status.innerHTML = "もう一度試してください";
+            console.log("onnomatch")
+        };
+        recognition.onerror = function() {
+            console.log("onerror")
+            //document.getElementById('status').innerHTML = "エラー";
+            disp_status.innerHTML = "エラー";
+            recog_stop();
+            recog_start();
+        };
+        recognition.onsoundend = function() {
+            console.log("onsoundend")
+            //document.getElementById('status').innerHTML = "停止中";
+            disp_status.innerHTML = "停止中";
+            recog_stop();
+            recog_start();
+        };
 
-
-
-        function vr_function() {
-            console.log("app:start vr_function")
-            speech.style.backgroundColor = "lightblue";
-            window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-            var recognition = new window.SpeechRecognition();
-            recognition.lang = 'ja';
-            recognition.interimResults = true;
-            recognition.continuous = true;
-
-            recognition.onsoundstart = function() {
-                document.getElementById('status').innerHTML = "認識中";
-                console.log("onsoundstart")
-            };
-            recognition.onnomatch = function() {
-                document.getElementById('status').innerHTML = "もう一度試してください";
-                console.log("onnomatch")
-            };
-            recognition.onerror = function() {
-                document.getElementById('status').innerHTML = "エラー";
-                console.log("onerror")
-                if(flag_speech == 0)
-                    speech.style.backgroundColor = "white";
-                    vr_function();
-                };
-            recognition.onsoundend = function() {
-                document.getElementById('status').innerHTML = "停止中";
-                console.log("onsoundend")
-                speech.style.backgroundColor = "white";
-                vr_function();
-            };
-
-            recognition.onresult = function(event) {
-                var results = event.results;
-                for (var i = event.resultIndex; i < results.length; i++) {
-                    if (results[i].isFinal){
-                        document.getElementById('result_text').innerHTML = results[i][0].transcript;
-                        console.log("app:result = " + results[i][0].transcript)
-                        if (dataConn != null) {
-                            dataConn.send(results[i][0].transcript);
-                        } else {
-                            console.log("app:dataConn is null")
-                        }
-                        vr_function();
+        recognition.onresult = function(event) {
+            var results = event.results;
+            for (var i = event.resultIndex; i < results.length; i++) {
+                if (results[i].isFinal){
+                    document.getElementById('result_text').innerHTML = results[i][0].transcript;
+                    console.log("app:result = " + results[i][0].transcript)
+                    if (dataConn != null) {
+                        dataConn.send(results[i][0].transcript);
                     } else {
-                        //document.getElementById('result_text').innerHTML = "[途中経過] " + results[i][0].transcript;
-                        document.getElementById('result_text').innerHTML = results[i][0].transcript;
-                        flag_speech = 1;
+                        console.log("app:dataConn is null")
                     }
+                    recog_start()
+                } else {
+                    //document.getElementById('result_text').innerHTML = "[途中経過] " + results[i][0].transcript;
+                    document.getElementById('result_text').innerHTML = results[i][0].transcript;
                 }
-            }   
-            flag_speech = 0;
-            document.getElementById('status').innerHTML = "start";
+            }
+        }   
+
+        function recog_start() {
+            console.log("recog_start")
             recognition.start();
+            //btn_recog.textContent = "音声入力　ストップ"
+            speech.textContent = "音声入力　ストップ"
+            speech.style.backgroundColor = "lightblue";
+            flg_speech = 1;
         }
+
+        function recog_stop() {
+            console.log("recog_stop")
+            recognition.stop();
+            //btn_recog.textContent = "音声入力　スタート"
+            speech.textContent = "音声入力　スタート"
+            speech.style.backgroundColor = "white";
+            flg_speech = 0;
+        }
+
+        recog_start();
+
 
         function send_function() {
             if (dataConn != null) {

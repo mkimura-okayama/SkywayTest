@@ -9,11 +9,6 @@
   </head>
   <body>
     <script> 
-      window.addEventListener("DOMContentLoaded", () => { 
-          const button = document.getElementById("button"); 
-          const result = document.getElementById("result"); 
-          const main = document.getElementsByTagName("main")[0]; 
-      }); 
   
       window.addEventListener("DOMContentLoaded", () => { 
           const button = document.getElementById("button"); 
@@ -31,12 +26,12 @@
               const recognition = new SpeechRecognition(); 
               const start = () => {
                   recognition.start(); 
-                  button.textContent = "Stop listening"; 
+                  button.textContent = "音声入力　ストップ"; 
                   main.classList.add("speaking"); 
               }; 
               const stop = () => {
                   recognition.stop(); 
-                  button.textContent = "Start listening"; 
+                  button.textContent = "音声入力　スタート"; 
                   main.classList.remove("speaking"); 
               }; 
               const onResult = event => {
