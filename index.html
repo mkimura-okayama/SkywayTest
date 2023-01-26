@@ -20,7 +20,7 @@
     <input type="button" id="speech" onClick="recog_start();" value="音認開始">
     <p id="status"></p>
     <input type="button" id="btnSend"   onClick="send_function();" value="送信">
-    <p>ver 0.8.4</p>
+    <p>ver 0.8.5</p>
     <p id="their-text">受信テキスト</p>
     <script>
         // SkyWay
@@ -60,8 +60,6 @@
             console.log('音が受信できなくなりました');
             //document.getElementById('status').innerHTML = "停止中";
             disp_status.innerHTML = "停止中";
-            recog_stop();
-            recog_start();
         }
         recognition.onnomatch = function() {
             console.log("onnomatch")
@@ -95,6 +93,8 @@
         recognition.onend = () => {
             console.log("onend")
             console.log('音声認識サービスを切断しました。');
+            recog_stop();
+            recog_start();
         }
 
         recognition.onresult = function(event) {
